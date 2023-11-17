@@ -8,24 +8,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ToolCreateToolResponseDTO {
+public class GetAllResponseDTO {
+    private Integer id;
     private String title;
     private String link;
     private String description;
-    private ArrayList<String> tags = new ArrayList<String>();
+    private List<String> tags = new ArrayList<String>();
 
-    public ToolCreateToolResponseDTO(ToolModel data){
+    public GetAllResponseDTO(ToolModel data){
+        this.id = data.getId();
         this.title = data.getTitle();
         this.link = data.getLink();
-        this.description = data.getDescription();
-        if(data.getTags() != null){
+        this.description= data.getDescription();
+
+        if(data.getTags() != null) {
             for(TagModel tag : data.getTags()){
-                tags.add(tag.getDescription());
+                this.tags.add(tag.getDescription());
             }
         }
     }

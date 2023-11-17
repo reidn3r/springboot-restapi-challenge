@@ -1,8 +1,8 @@
 package com.example.BossaBox.controller;
 
-import com.example.BossaBox.DTO.ToolCreateToolResponseDTO;
+import com.example.BossaBox.DTO.CreateToolResponseDTO;
 import com.example.BossaBox.DTO.ToolDTO;
-import com.example.BossaBox.DTO.ToolGetAllResponseDTO;
+import com.example.BossaBox.DTO.GetAllResponseDTO;
 import com.example.BossaBox.domain.TagModel;
 import com.example.BossaBox.domain.ToolModel;
 import com.example.BossaBox.repository.TagRepository;
@@ -25,7 +25,7 @@ public class ToolController {
     TagRepository tagRepo;
 
     @GetMapping
-    public ResponseEntity<List<ToolGetAllResponseDTO>> getAllTools(@RequestParam(required = false) String tag){
+    public ResponseEntity<List<GetAllResponseDTO>> getAllTools(@RequestParam(required = false) String tag){
         if(tag != null && !tag.isEmpty()){
             /* 1. Laço executado caso a requisição tenha parâmetro "tag" */
             List<TagModel> foundDataByTag = tagRepo.findToolIdByDescription(tag);
@@ -35,14 +35,13 @@ public class ToolController {
                 do dado encontrado no banco de dados */
             Map<Integer, ToolModel> dataMap = new HashMap<Integer, ToolModel>();
             for(TagModel foundTag : foundDataByTag){
-                System.out.println(foundTag.getTool_model().getId());
                 dataMap.put(foundTag.getTool_model().getId(), foundTag.getTool_model());
             }
 
             /* 3. Transferência dos dados do HashMap para a Lista de resposta */
-            List<ToolGetAllResponseDTO> response = new ArrayList<>();
+            List<GetAllResponseDTO> response = new ArrayList<>();
             for(ToolModel tool : dataMap.values()){
-                ToolGetAllResponseDTO item = new ToolGetAllResponseDTO(tool);
+                GetAllResponseDTO item = new GetAllResponseDTO(tool);
                 response.add(item);
             }
             return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -50,15 +49,14 @@ public class ToolController {
         else{
             /* 1. Laço executado caso a requisição não tenha parâmetros */
             List<ToolModel> foundData = toolRepo.findAll();
-            List<ToolGetAllResponseDTO> response = new ArrayList<>();
+            List<GetAllResponseDTO> response = new ArrayList<>();
             for(ToolModel model : foundData){
-                ToolGetAllResponseDTO dtoResponse = new ToolGetAllResponseDTO(model);
+                GetAllResponseDTO dtoResponse = new GetAllResponseDTO(model);
                 response.add(dtoResponse);
             }
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
-
 
     @PostMapping
     public ResponseEntity<Object> createTool(@RequestBody @Valid ToolDTO data){
@@ -82,16 +80,16 @@ public class ToolController {
         }
 
         toolCreated.setTags(tags);
-        ToolCreateToolResponseDTO response = new ToolCreateToolResponseDTO(toolCreated);
+        CreateToolResponseDTO response = new CreateToolResponseDTO(toolCreated);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
-    /* Deleção por id:
-    *       1. Dados na tabela tb_tags são removidos automaticamente (Delete em Cascata)
-    *           graças ao parâmetro "orphanRemoval" definido na anotação
-    *           @OneToMany na classe ToolModel */
     public ResponseEntity<Object> deleteTool(@PathVariable(value = "id") Integer id){
+        /* Deleção por id:
+         *       1. Dados na tabela tb_tags são removidos automaticamente (Delete em Cascata)
+         *           graças ao parâmetro "orphanRemoval" definido na anotação
+         *           @OneToMany na classe ToolModel */
         Optional<ToolModel> foundData = toolRepo.findById(id);
         if(foundData.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.EMPTY_LIST);
         toolRepo.deleteById(id);
