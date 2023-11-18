@@ -1,7 +1,6 @@
 package com.example.BossaBox.infra.security;
 
 import com.example.BossaBox.repository.UserRepository;
-import com.example.BossaBox.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

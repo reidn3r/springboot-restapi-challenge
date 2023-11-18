@@ -1,4 +1,4 @@
-package com.example.BossaBox.DTO.responseDTO;
+package com.example.BossaBox.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

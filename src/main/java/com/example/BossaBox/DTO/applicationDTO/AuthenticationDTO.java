@@ -1,4 +1,4 @@
-package com.example.BossaBox.DTO.applicationDTO;
+package com.example.BossaBox.DTO;
 
 import jakarta.validation.constraints.NotNull;
 
