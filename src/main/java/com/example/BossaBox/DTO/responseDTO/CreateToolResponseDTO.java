@@ -1,4 +1,4 @@
-package com.example.BossaBox.DTO;
+package com.example.BossaBox.DTO.responseDTO;
 
 import com.example.BossaBox.domain.Tag.TagModel;
 import com.example.BossaBox.domain.Tool.ToolModel;

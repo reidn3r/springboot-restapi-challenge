@@ -1,4 +1,4 @@
-package com.example.BossaBox.DTO;
+package com.example.BossaBox.DTO.applicationDTO;
 
 import lombok.Getter;
 import lombok.Setter;

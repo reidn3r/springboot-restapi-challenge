@@ -1,4 +1,4 @@
-package com.example.BossaBox.infra.security;
+package com.example.BossaBox.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
