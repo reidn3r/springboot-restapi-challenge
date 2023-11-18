@@ -1,8 +1,10 @@
 package com.example.BossaBox.controller;
 
 import com.example.BossaBox.DTO.AuthenticationDTO;
+import com.example.BossaBox.DTO.LoginResponseDTO;
 import com.example.BossaBox.DTO.RegisterDTO;
 import com.example.BossaBox.domain.User.UserModel;
+import com.example.BossaBox.infra.security.TokenService;
 import com.example.BossaBox.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    UserRepository userRepo;
+    private UserRepository userRepo;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/register")
     public ResponseEntity<Object> registerController(@RequestBody @Valid RegisterDTO data){
@@ -41,14 +49,17 @@ public class AuthController {
     return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
     @PostMapping("/login")
     public ResponseEntity<Object> loginController(@RequestBody @Valid AuthenticationDTO data) {
         /* Comparação dos dados enviados no corpo da requisição com os dados salvos no BD */
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+
+        /* Geração do token de autenticação */
+        var token = tokenService.generateToken((UserModel) auth.getPrincipal());
+
+        /* Objeto resposta contendo o token */
+        LoginResponseDTO response = new LoginResponseDTO(token);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
