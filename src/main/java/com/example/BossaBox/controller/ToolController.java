@@ -7,6 +7,10 @@ import com.example.BossaBox.domain.Tag.TagModel;
 import com.example.BossaBox.domain.Tool.ToolModel;
 import com.example.BossaBox.repository.TagRepository;
 import com.example.BossaBox.repository.ToolRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/v1/tools")
+@SecurityRequirement(name="Bearer Auth")
+@Tag(name="Tool Controller")
 public class ToolController {
     @Autowired
     ToolRepository toolRepo;
@@ -24,6 +30,19 @@ public class ToolController {
     @Autowired
     TagRepository tagRepo;
 
+    @Operation(
+            description = "Endpoint que retorna todas as ferramentas registradas ou retorna todas ferramentas pertencentes a uma determinada tag",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Ferramenta nao encontrada",
+                            responseCode = "404"
+                    )
+            }
+    )
     @GetMapping
     public ResponseEntity<List<GetAllResponseDTO>> getAllTools(@RequestParam(required = false) String tag){
         if(tag != null && !tag.isEmpty()){
@@ -58,6 +77,19 @@ public class ToolController {
         }
     }
 
+    @Operation(
+            description = "Endpoint que registra novas ferramentas no banco de dados",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso. Nova ferramenta criada",
+                            responseCode = "201"
+                    ),
+                    @ApiResponse(
+                            description = "Falha. Ferramenta já registrada",
+                            responseCode = "409"
+                    )
+            }
+    )
     @PostMapping
     public ResponseEntity<Object> createTool(@RequestBody @Valid ToolDTO data){
         /* 1. Criação de novo dado
@@ -84,6 +116,19 @@ public class ToolController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @Operation(
+            description = "Endpoint que deleta uma ferramenta baseada no id",
+            responses = {
+                    @ApiResponse(
+                            description = "Sucesso. Ferramenta deletada",
+                            responseCode = "200"
+                    ),
+                    @ApiResponse(
+                            description = "Falha. Ferramenta nao existente no banco de dados",
+                            responseCode = "404"
+                    )
+            }
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTool(@PathVariable(value = "id") Integer id){
         /* Deleção por id:
