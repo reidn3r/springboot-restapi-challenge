@@ -1,7 +1,7 @@
 package com.example.BossaBox.DTO;
 
-import com.example.BossaBox.domain.TagModel;
-import com.example.BossaBox.domain.ToolModel;
+import com.example.BossaBox.domain.Tag.TagModel;
+import com.example.BossaBox.domain.Tool.ToolModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

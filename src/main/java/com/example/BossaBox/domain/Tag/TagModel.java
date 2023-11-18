@@ -1,6 +1,6 @@
-package com.example.BossaBox.domain;
+package com.example.BossaBox.domain.Tag;
 
-import com.example.BossaBox.DTO.ToolDTO;
+import com.example.BossaBox.domain.Tool.ToolModel;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.example.BossaBox.repository;
 
-import com.example.BossaBox.domain.TagModel;
+import com.example.BossaBox.domain.Tag.TagModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
